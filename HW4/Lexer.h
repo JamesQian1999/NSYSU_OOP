@@ -1,26 +1,46 @@
-#include "Tag.h"
+#ifndef _LEXER_H_
+#define _LEXER_H_
+
 #include <ctype.h>
 #include <map>
+#include "Word.h"
+#include "Type.h"
+#include "Token.h"
+#include "Num.h"
+#include "Real.h"
+#include "Tag.h"
+using namespace std;
 class Lexer
 {
 public:
     int line = 1;
     char peek = ' ';
-    map<string, int> words;
+    map<string, Word> words;
     void reserve(Word w)
     {
-        words.put(w.lexeme, w);
-        words.insert(pair<string, int>(w.lexeme, w));
+        words.insert(pair<string, Word>(w.lexeme, w));
     }
     Lexer()
     {
-        reserve(new Word("if", Tag.IF));
-        reserve(new Word("else", Tag.ELSE));
-        reserve(new Word("while", Tag.WHILE));
-        reserve(new Word("do", Tag.DO));
-        reserve(new Word("break", Tag.BREAK));
-        reserve(Word.True);
-        reserve(Word.False);
+        Tag *tag = new Tag();
+        Word *tmp = new Word("if", tag->IF);
+        reserve(*tmp);
+        delete tmp;
+        tmp = new Word("else", tag->ELSE);
+        reserve(*tmp);
+        delete tmp;
+        tmp =new Word("while", tag->WHILE);
+        reserve(*tmp);
+        delete tmp;
+        tmp =new Word("do", tag->DO);
+        reserve(*tmp);
+        delete tmp;
+        tmp =new Word("break", tag->BREAK);
+        reserve(*tmp);
+        delete tmp;
+        tmp = new Word();
+        reserve(*(tmp->True));
+        reserve(*(tmp->False));
         reserve(Type.Int);
         reserve(Type.Char);
         reserve(Type.Bool);
@@ -42,6 +62,7 @@ public:
     }
     Token scan()
     {
+        Word *tmp = new Word();
         for (;; readch())
         {
             if (peek == ' ' || peek == '\t')
@@ -56,34 +77,34 @@ public:
         {
         case '&':
             if (readch('&'))
-                return Word.and;
+                return *(tmp->and_);
             else
-                return new Token('&');
+                return Token('&');
         case '|':
             if (readch('|'))
-                return Word.or ;
+                return *(tmp->or_);
             else
-                return new Token('|');
+                return Token('|');
         case '=':
             if (readch('='))
-                return Word.eq;
+                return *(tmp->eq);
             else
-                return new Token('=');
+                return Token('=');
         case '!':
             if (readch('='))
-                return Word.ne;
+                return *(tmp->ne);
             else
-                return new Token('!');
+                return Token('!');
         case '<':
             if (readch('='))
-                return Word.le;
+                return *(tmp->le);
             else
-                return new Token('<');
+                return Token('<');
         case '>':
             if (readch('='))
-                return Word.ge;
+                return *(tmp->ge);
             else
-                return new Token('>');
+                return Token('>');
         }
 
         if (isdigit(peek))
@@ -91,11 +112,12 @@ public:
             int v = 0;
             do
             {
-                v = 10 * v + stoi(peek);
+                string tmp_string(1, peek);
+                v = 10 * v + stoi(tmp_string);
                 readch();
             } while (isdigit(peek));
             if (peek != '.')
-                return new Num(v);
+                return Num(v);
             float x = v;
             float d = 10;
             for (;;)
@@ -103,10 +125,11 @@ public:
                 readch();
                 if (!isdigit(peek))
                     break;
-                x = x + stoi(peek) / d;
+                string tmp_string(1, peek);
+                x = x + stoi(tmp_string) / d;
                 d = d * 10;
             }
-            return new Real(x);
+            return Real(x);
         }
 
         if (isalpha(peek))
@@ -119,15 +142,17 @@ public:
             } while (isalpha(peek)||isdigit(peek));
             string s = b;
 
-            Word w = (Word)words.get(s);
+            Word w = (Word)words[s];
             if (w != NULL)
                 return w;
             w = new Word(s, Tag.ID);
-            words.put(s, w);
+            words.insert(pair<string, Word>(s, w));
             return w;
         }
-        Token tok = new Token(peek);
+        Token tok(peek);
         peek = ' ';
         return tok;
     }
 };
+
+#endif
