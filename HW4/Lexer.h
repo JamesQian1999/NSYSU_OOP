@@ -15,6 +15,7 @@ class Lexer
 public:
     int line = 1;
     char peek = ' ';
+    Tag *tag = new Tag();
     map<string, Word> words;
     void reserve(Word w)
     {
@@ -22,7 +23,6 @@ public:
     }
     Lexer()
     {
-        Tag *tag = new Tag();
         Word *tmp = new Word("if", tag->IF);
         reserve(*tmp);
         delete tmp;
@@ -41,10 +41,11 @@ public:
         tmp = new Word();
         reserve(*(tmp->True));
         reserve(*(tmp->False));
-        reserve(Type.Int);
-        reserve(Type.Char);
-        reserve(Type.Bool);
-        reserve(Type.Float);
+        Type *type = new Type();
+        reserve(*(type->Int));
+        reserve(*(type->Char));
+        reserve(*(type->Bool));
+        reserve(*(type->Float));
     }
     void readch()
     {
@@ -143,9 +144,9 @@ public:
             string s = b;
 
             Word w = (Word)words[s];
-            if (w != NULL)
+            if (!w)
                 return w;
-            w = new Word(s, Tag.ID);
+            w = Word(s, tag->ID);
             words.insert(pair<string, Word>(s, w));
             return w;
         }
