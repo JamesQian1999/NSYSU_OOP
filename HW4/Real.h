@@ -1,22 +1,22 @@
 #ifndef _REAL_H_
 #define _REAL_H_
-#include <sstream>
 #include "Token.h"
-using namespace std;
+#include "Tag.h"
+
 class Real : public Token
 {
 public:
     float value;
-    Tag *tag = new Tag();
-    Real(float v) : Token(tag->REAL)
+    Real(float v) : Token(Tag::REAL)
     {
         value = v;
     }
     string toString()
     {
-        ostringstream ss;
+        string s;
+        stringstream ss;
         ss << value;
-        string s(ss.str());
+        ss >> s;
         return s;
     }
 };

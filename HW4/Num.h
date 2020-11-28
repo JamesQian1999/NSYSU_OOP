@@ -1,23 +1,21 @@
 #ifndef _NUM_H_
 #define _NUM_H_
-#include <sstream>
-#include "Token.h"
 #include "Tag.h"
-using namespace std;
+#include "Token.h"
 class Num : public Token
 {
 public:
     int value;
-    Tag *tag = new Tag();
-    Num(int v):Token(tag->NUM)
+    Num(int v) : Token(Tag::NUM)
     {
         value = v;
     }
     string toString()
     {
-        ostringstream ss;
+        string s;
+        stringstream ss;
         ss << value;
-        string s(ss.str());
+        ss >> s;
         return s;
     }
 };

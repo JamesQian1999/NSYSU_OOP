@@ -1,57 +1,44 @@
 #ifndef _LEXER_H_
 #define _LEXER_H_
-
-#include <ctype.h>
-#include <map>
-#include "Word.h"
 #include "Type.h"
-#include "Token.h"
-#include "Num.h"
-#include "Real.h"
-#include "Tag.h"
-using namespace std;
+
 class Lexer
 {
 public:
     int line = 1;
     char peek = ' ';
-    Tag *tag = new Tag();
-    map<string, Word> words;
+    Hashtable words = new Hashtable();
     void reserve(Word w)
     {
-        words.insert(pair<string, Word>(w.lexeme, w));
+        words.put(w.lexeme, w);
     }
     Lexer()
     {
-        Word *tmp = new Word("if", tag->IF);
+        Word *tmp =new  Word("if", Tag::IF);
+        reserve(*tmp);
+        tmp = new Word("else", Tag::ELSE);
+        reserve(*tmp);
+        tmp = new Word("while", Tag::WHILE);
+        reserve(*tmp);
+        tmp = new Word("do", Tag::DO);
+        reserve(*tmp);
+        tmp = new Word("break", Tag::BREAK);
         reserve(*tmp);
         delete tmp;
-        tmp = new Word("else", tag->ELSE);
-        reserve(*tmp);
-        delete tmp;
-        tmp =new Word("while", tag->WHILE);
-        reserve(*tmp);
-        delete tmp;
-        tmp =new Word("do", tag->DO);
-        reserve(*tmp);
-        delete tmp;
-        tmp =new Word("break", tag->BREAK);
-        reserve(*tmp);
-        delete tmp;
-        tmp = new Word();
-        reserve(*(tmp->True));
-        reserve(*(tmp->False));
-        Type *type = new Type();
-        reserve(*(type->Int));
-        reserve(*(type->Char));
-        reserve(*(type->Bool));
-        reserve(*(type->Float));
+        reserve(*Word::True);
+        reserve(Word.False);
+        reserve(Type.Int);
+        reserve(Type.Char);
+        reserve(Type.Bool);
+        reserve(Type.Float);
     }
     void readch()
     {
-        int i = getchar();
+        int i = System.in.read();
         if (i != -1)
             peek = (char)i;
+        else
+        //throw new IOException("End of file reached");
     }
     bool readch(char c)
     {
@@ -63,7 +50,6 @@ public:
     }
     Token scan()
     {
-        Word *tmp = new Word();
         for (;; readch())
         {
             if (peek == ' ' || peek == '\t')
@@ -78,79 +64,77 @@ public:
         {
         case '&':
             if (readch('&'))
-                return *(tmp->and_);
+                return Word.and;
             else
-                return Token('&');
+                return new Token('&');
         case '|':
             if (readch('|'))
-                return *(tmp->or_);
+                return Word.or ;
             else
-                return Token('|');
+                return new Token('|');
         case '=':
             if (readch('='))
-                return *(tmp->eq);
+                return Word.eq;
             else
-                return Token('=');
+                return new Token('=');
         case '!':
             if (readch('='))
-                return *(tmp->ne);
+                return Word.ne;
             else
-                return Token('!');
+                return new Token('!');
         case '<':
             if (readch('='))
-                return *(tmp->le);
+                return Word.le;
             else
-                return Token('<');
+                return new Token('<');
         case '>':
             if (readch('='))
-                return *(tmp->ge);
+                return Word.ge;
             else
-                return Token('>');
+                return new Token('>');
         }
 
-        if (isdigit(peek))
+        if (Character.isDigit(peek))
         {
             int v = 0;
             do
             {
-                string tmp_string(1, peek);
-                v = 10 * v + stoi(tmp_string);
+                v = 10 * v + Character.digit(peek, 10);
                 readch();
-            } while (isdigit(peek));
+            } while (Character.isDigit(peek));
             if (peek != '.')
-                return Num(v);
+                return new Num(v);
             float x = v;
             float d = 10;
             for (;;)
             {
                 readch();
-                if (!isdigit(peek))
+                if (!Character.isDigit(peek))
                     break;
-                string tmp_string(1, peek);
-                x = x + stoi(tmp_string) / d;
+                x = x + Character.digit(peek, 10) / d;
                 d = d * 10;
             }
-            return Real(x);
+            return new Real(x);
         }
 
-        if (isalpha(peek))
+        if (Character.isLetter(peek))
         {
-            string b="";
+            StringBuffer b = new StringBuffer();
             do
             {
-                b+=peek;
+                b.append(peek);
                 readch();
-            } while (isalpha(peek)||isdigit(peek));
-            string s = b;
-
-            Word w = (Word)words[s];
-            if (!w)
+            } while (Character.isLetterOrDigit(peek));
+            String s = b.toString();
+            Word w = (Word)words.get(s);
+            if (w != null)
                 return w;
-            w = Word(s, tag->ID);
-            words.insert(pair<string, Word>(s, w));
+            w = new Word(s, Tag.ID);
+            words.put(s, w);
             return w;
         }
-        Token tok(peek);
+
+        Token tok = new Token(peek);
         peek = ' ';
         return tok;
     }
