@@ -1,9 +1,10 @@
 #include <iostream>
 #include <map>
-#include "boost/variant.hpp" 
+#include <cstdlib>
 using namespace std;
 int main()
 {
-    map <std::string, boost::variant<int, string>>;
+    char peek = '4';
+    cout<<atoi(&peek)<<endl;
     return 0;
 }

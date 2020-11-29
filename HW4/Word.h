@@ -20,6 +20,13 @@ public:
     {
         return lexeme;
     }
+
+    bool operator !()
+    {
+        if(lexeme=="" && !tag)
+            return true;
+        return false;
+    }
 };
 
 

@@ -1,6 +1,7 @@
 #ifndef _LEXER_H_
 #define _LEXER_H_
 #include <map>
+#include <cstdlib>
 #include "Type.h"
 #include "Num.h"
 #include "Real.h"
@@ -15,7 +16,7 @@ public:
     map<string, Word> words;
     void reserve(Word w)
     {
-        words[w.lexeme] =  w;
+        words[w.lexeme] = w;
     }
     Lexer()
     {
@@ -115,14 +116,14 @@ public:
                 return Token('>');
         }
 
-        if (Character.isDigit(peek))
+        if (isdigit(peek))
         {
             int v = 0;
             do
             {
-                v = 10 * v + Character.digit(peek, 10);
+                v = 10 * v + atoi(&peek);
                 readch();
-            } while (Character.isDigit(peek));
+            } while (isdigit(peek));
             if (peek != '.')
                 return Num(v);
             float x = v;
@@ -130,28 +131,28 @@ public:
             for (;;)
             {
                 readch();
-                if (!Character.isDigit(peek))
+                if (!isdigit(peek))
                     break;
-                x = x + Character.digit(peek, 10) / d;
+                x = x + atoi(&peek) / d;
                 d = d * 10;
             }
             return Real(x);
         }
 
-        if (Character.isLetter(peek))
+        if (isalpha(peek))
         {
-            StringBuffer b = new StringBuffer();
+            string b = "";
             do
             {
-                b.append(peek);
+                b += peek;
                 readch();
-            } while (Character.isLetterOrDigit(peek));
-            string s = b.toString();
-            Word w = (Word)words.get(s);
-            if (w != null)
+            } while (isalpha(peek) || isdigit(peek));
+            string s = b;
+            Word w = words[s];
+            if (!w)
                 return w;
-            w = new Word(s, Tag.ID);
-            words.put(s, w);
+            w = Word(s, Tag::ID);
+            words[s] = w;
             return w;
         }
 

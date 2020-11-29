@@ -5,7 +5,7 @@ using namespace std;
 class Token
 {
 public:
-    int tag;
+    int tag=0;
     Token(){}
     Token(int t)
     {
