@@ -10,7 +10,7 @@ public:
     {
         value = v;
     }
-    string toString()
+    virtual string toString()
     {
         string s;
         stringstream ss;

@@ -6,11 +6,12 @@ class Token
 {
 public:
     int tag;
+    Token(){}
     Token(int t)
     {
         tag = t;
     }
-    string toString()
+    virtual string toString()
     {
         string s;
         stringstream ss;

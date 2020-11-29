@@ -1,20 +1,25 @@
 #ifndef _LEXER_H_
 #define _LEXER_H_
+#include <map>
 #include "Type.h"
+#include "Num.h"
+#include "Real.h"
 
 class Lexer
 {
 public:
     int line = 1;
     char peek = ' ';
-    Hashtable words = new Hashtable();
+    Word word;
+    Type type;
+    map<string, Word> words;
     void reserve(Word w)
     {
-        words.put(w.lexeme, w);
+        words[w.lexeme] =  w;
     }
     Lexer()
     {
-        Word *tmp =new  Word("if", Tag::IF);
+        Word *tmp = new Word("if", Tag::IF);
         reserve(*tmp);
         tmp = new Word("else", Tag::ELSE);
         reserve(*tmp);
@@ -25,20 +30,36 @@ public:
         tmp = new Word("break", Tag::BREAK);
         reserve(*tmp);
         delete tmp;
-        reserve(*Word::True);
-        reserve(Word.False);
-        reserve(Type.Int);
-        reserve(Type.Char);
-        reserve(Type.Bool);
-        reserve(Type.Float);
+
+        word.and_ = new Word("&&", Tag::AND);
+        word.or_ = new Word("||", Tag::OR);
+        word.eq = new Word("==", Tag::EQ);
+        word.ne = new Word("!=", Tag::NE);
+        word.le = new Word("<=", Tag::LE);
+        word.ge = new Word(">=", Tag::GE);
+        word.minus = new Word("minus", Tag::MINUS);
+        word.True = new Word("true", Tag::TRUE);
+        word.False = new Word("false", Tag::FALSE);
+        word.temp = new Word("t", Tag::TEMP);
+
+        reserve(*word.True);
+        reserve(*word.False);
+
+        type.Int = new Word("int", Tag::BASIC);
+        type.Float = new Type("float", Tag::BASIC, 8);
+        type.Char = new Type("char", Tag::BASIC, 1);
+        type.Bool = new Type("bool", Tag::BASIC, 1);
+
+        reserve(*type.Int);
+        reserve(*type.Char);
+        reserve(*type.Bool);
+        reserve(*type.Float);
     }
     void readch()
     {
-        int i = System.in.read();
+        int i = getchar();
         if (i != -1)
             peek = (char)i;
-        else
-        //throw new IOException("End of file reached");
     }
     bool readch(char c)
     {
@@ -64,34 +85,34 @@ public:
         {
         case '&':
             if (readch('&'))
-                return Word.and;
+                return *word.and_;
             else
-                return new Token('&');
+                return Token('&');
         case '|':
             if (readch('|'))
-                return Word.or ;
+                return *word.or_;
             else
-                return new Token('|');
+                return Token('|');
         case '=':
             if (readch('='))
-                return Word.eq;
+                return *word.eq;
             else
-                return new Token('=');
+                return Token('=');
         case '!':
             if (readch('='))
-                return Word.ne;
+                return *word.ne;
             else
-                return new Token('!');
+                return Token('!');
         case '<':
             if (readch('='))
-                return Word.le;
+                return *word.le;
             else
-                return new Token('<');
+                return Token('<');
         case '>':
             if (readch('='))
-                return Word.ge;
+                return *word.ge;
             else
-                return new Token('>');
+                return Token('>');
         }
 
         if (Character.isDigit(peek))
@@ -103,7 +124,7 @@ public:
                 readch();
             } while (Character.isDigit(peek));
             if (peek != '.')
-                return new Num(v);
+                return Num(v);
             float x = v;
             float d = 10;
             for (;;)
@@ -114,7 +135,7 @@ public:
                 x = x + Character.digit(peek, 10) / d;
                 d = d * 10;
             }
-            return new Real(x);
+            return Real(x);
         }
 
         if (Character.isLetter(peek))
@@ -125,7 +146,7 @@ public:
                 b.append(peek);
                 readch();
             } while (Character.isLetterOrDigit(peek));
-            String s = b.toString();
+            string s = b.toString();
             Word w = (Word)words.get(s);
             if (w != null)
                 return w;
@@ -134,7 +155,7 @@ public:
             return w;
         }
 
-        Token tok = new Token(peek);
+        Token tok(peek);
         peek = ' ';
         return tok;
     }
