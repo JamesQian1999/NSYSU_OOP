@@ -145,10 +145,13 @@ public:
             do
             {
                 b += peek;
+                // cout<<"peek= "<<peek<<endl;
                 readch();
             } while (isalpha(peek) || isdigit(peek));
             string s = b;
+            // cout<<"string s= "<<s<<endl;
             Word w = words[s];
+            //cout<<"w.lexeme= "<<w.lexeme<<endl;
             if (!w)
                 return w;
             w = Word(s, Tag::ID);

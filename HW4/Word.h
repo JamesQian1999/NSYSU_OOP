@@ -24,8 +24,8 @@ public:
     bool operator !()
     {
         if(lexeme=="" && !tag)
-            return true;
-        return false;
+            return false;
+        return true;
     }
 };
 
