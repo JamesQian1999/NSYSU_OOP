@@ -59,8 +59,16 @@ public:
     void readch()
     {
         int i = getchar();
+        if(i!=' ' && i!='\n' && i!=-1)
+            cout<<(char)i;
+
         if (i != -1)
             peek = (char)i;
+        else
+        {
+            cout<<endl;
+            exit(1);
+        }
     }
     bool readch(char c)
     {
@@ -72,12 +80,12 @@ public:
     }
     Token scan()
     {
+        cout<<"Tocken: ";
         for (;; readch())
         {
             if (peek == ' ' || peek == '\t')
                 continue;
             else if (peek == '\n')
-
                 line = line + 1;
             else
                 break;
@@ -145,13 +153,10 @@ public:
             do
             {
                 b += peek;
-                // cout<<"peek= "<<peek<<endl;
                 readch();
             } while (isalpha(peek) || isdigit(peek));
             string s = b;
-            // cout<<"string s= "<<s<<endl;
             Word w = words[s];
-            //cout<<"w.lexeme= "<<w.lexeme<<endl;
             if (!w)
                 return w;
             w = Word(s, Tag::ID);
@@ -160,7 +165,7 @@ public:
         }
 
         Token tok(peek);
-        peek = ' ';
+        peek =' ';
         return tok;
     }
 };
