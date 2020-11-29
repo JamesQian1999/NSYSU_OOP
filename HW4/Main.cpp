@@ -9,6 +9,7 @@ int main()
         {
             Token t = lexer.scan();
             cout<<t.toString()<<endl;
+            cout<<"here";
         }
     }
 }
