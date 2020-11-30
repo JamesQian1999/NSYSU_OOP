@@ -158,6 +158,8 @@ public:
             } while (isdigit(peek));
             if (peek != '.')
                 return Num(v);
+            peek_tmp = 0;
+            cout<<peek;
             float x = v;
             float d = 10;
             for (;;)
