@@ -11,6 +11,7 @@ class Lexer
 public:
     int line = 1;
     char peek = ' ';
+    int peek_tmp = 0;
     Word word;
     Type type;
     map<string, Word> words;
@@ -59,11 +60,20 @@ public:
         reserve(*type.Float);
     }
 
-    void readch()
+    void readch(int flag = 0)
     {
         int i = getchar();
-        if (i != ' ' && i != '\n' && i != -1)
-            cout << (char)i;
+        if (flag)
+        {
+            peek_tmp = i;
+            if (i != ' ' && i != '\n' && i != -1 && (isalpha((char)i) || isdigit((char)i)))
+                cout << (char)i;
+        }
+        else
+        {
+            if (i != ' ' && i != '\n' && i != -1)
+                cout << (char)i;
+        }
 
         if (i != -1)
             peek = (char)i;
@@ -85,6 +95,12 @@ public:
 
         if (cin.peek() != -1)
             cout << "Tocken: ";
+
+        if(peek_tmp && peek_tmp !=' ')
+        {
+            cout<<(char)peek_tmp;
+            peek_tmp = 0;
+        }
 
         for (;; readch())
         {
@@ -136,7 +152,7 @@ public:
             do
             {
                 v = 10 * v + atoi(&peek);
-                readch();
+                readch(1);
             } while (isdigit(peek));
             if (peek != '.')
                 return Num(v);
@@ -159,7 +175,7 @@ public:
             do
             {
                 b += peek;
-                readch();
+                readch(1);
             } while (isalpha(peek) || isdigit(peek));
             string s = b;
             Word w = words[s];
