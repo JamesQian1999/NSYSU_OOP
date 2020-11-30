@@ -14,10 +14,12 @@ public:
     Word word;
     Type type;
     map<string, Word> words;
+
     void reserve(Word w)
     {
         words[w.lexeme] = w;
     }
+
     Lexer()
     {
         Word *tmp = new Word("if", Tag::IF);
@@ -56,20 +58,19 @@ public:
         reserve(*type.Bool);
         reserve(*type.Float);
     }
+
     void readch()
     {
         int i = getchar();
-        if(i!=' ' && i!='\n' && i!=-1)
-            cout<<(char)i;
+        if (i != ' ' && i != '\n' && i != -1)
+            cout << (char)i;
 
         if (i != -1)
             peek = (char)i;
         else
-        {
-            cout<<endl;
             exit(1);
-        }
     }
+
     bool readch(char c)
     {
         readch();
@@ -78,9 +79,13 @@ public:
         peek = ' ';
         return true;
     }
+
     Token scan()
     {
-        cout<<"Tocken: ";
+
+        if (cin.peek() != -1)
+            cout << "Tocken: ";
+
         for (;; readch())
         {
             if (peek == ' ' || peek == '\t')
@@ -90,6 +95,7 @@ public:
             else
                 break;
         }
+
         switch (peek)
         {
         case '&':
@@ -165,9 +171,76 @@ public:
         }
 
         Token tok(peek);
-        peek =' ';
+        peek = ' ';
         return tok;
     }
 };
+
+void type(int tocken)
+{
+    switch (tocken)
+    {
+    case Tag::AND:
+        cout << "\t(AND)" << endl;
+        break;
+    case Tag::BASIC:
+        cout << "\t(BASIC)" << endl;
+        break;
+    case Tag::BREAK:
+        cout << "\t(BREAK)" << endl;
+        break;
+    case Tag::DO:
+        cout << "\t(DO)" << endl;
+        break;
+    case Tag::ELSE:
+        cout << "\t(ELSE)" << endl;
+        break;
+    case Tag::EQ:
+        cout << "\t(EQ)" << endl;
+        break;
+    case Tag::FALSE:
+        cout << "\t(FALSE)" << endl;
+        break;
+    case Tag::GE:
+        cout << "\t(GE)" << endl;
+        break;
+    case Tag::ID:
+        cout << "\t(ID)" << endl;
+        break;
+    case Tag::IF:
+        cout << "\t(IF)" << endl;
+        break;
+    case Tag::INDEX:
+        cout << "\t(INDEX)" << endl;
+        break;
+    case Tag::LE:
+        cout << "\t(LE)" << endl;
+        break;
+    case Tag::MINUS:
+        cout << "\t(MINUS)" << endl;
+        break;
+    case Tag::NE:
+        cout << "\t(NE)" << endl;
+        break;
+    case Tag::NUM:
+        cout << "\t(NUM)" << endl;
+        break;
+    case Tag::OR:
+        cout << "\t(OR)" << endl;
+        break;
+    case Tag::REAL:
+        cout << "\t(REAL)" << endl;
+        break;
+    case Tag::TEMP:
+        cout << "\t(TEMP)" << endl;
+        break;
+    case Tag::TRUE:
+        cout << "\t(TRUE)" << endl;
+        break;
+    case Tag::WHILE:
+        cout << "\t(WHILE)" << endl;
+        break;
+    }
+}
 
 #endif
