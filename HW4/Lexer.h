@@ -96,7 +96,7 @@ public:
     Token scan(int count)
     {
         if (cin.peek() != -1)
-            cout << count << ".\tTocken: ";
+            cout << count << ".\tToken: ";
 
         if (peek_tmp && peek_tmp != ' ')
         {
