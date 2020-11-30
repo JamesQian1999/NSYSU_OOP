@@ -78,7 +78,10 @@ public:
         if (i != -1)
             peek = (char)i;
         else
+        {
+            cout<<"End of file reached"<<endl;
             exit(1);
+        }
     }
 
     bool readch(char c)
@@ -90,11 +93,11 @@ public:
         return true;
     }
 
-    Token scan()
+    Token scan(int count)
     {
 
         if (cin.peek() != -1)
-            cout << "Tocken: ";
+            cout <<count<< ".\tTocken: ";
 
         if(peek_tmp && peek_tmp !=' ')
         {

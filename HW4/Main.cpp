@@ -5,9 +5,10 @@ int main()
 {
     Lexer lexer;
     {
+        int count = 1;
         while (true)
         {
-            Token t = lexer.scan();
+            Token t = lexer.scan(count++);
             int tocken = atoi(t.toString().c_str());
             if (tocken > 255)
                 type(tocken);
