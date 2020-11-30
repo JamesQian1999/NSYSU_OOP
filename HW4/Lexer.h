@@ -79,7 +79,7 @@ public:
             peek = (char)i;
         else
         {
-            cout<<"End of file reached"<<endl;
+            cout << "End of file reached" << endl;
             exit(1);
         }
     }
@@ -95,13 +95,12 @@ public:
 
     Token scan(int count)
     {
-
         if (cin.peek() != -1)
-            cout <<count<< ".\tTocken: ";
+            cout << count << ".\tTocken: ";
 
-        if(peek_tmp && peek_tmp !=' ')
+        if (peek_tmp && peek_tmp != ' ')
         {
-            cout<<(char)peek_tmp;
+            cout << (char)peek_tmp;
             peek_tmp = 0;
         }
 
