@@ -12,11 +12,11 @@ void f(double d)
     sci8.scientific().precision(8); // scientific format, precision 8
     Form fix8 = gen4;
     fix8.fixed().precision(8);      // fixed format, precision 8
-    cout << "default = " << d << endl
-         << "gen4 = " << gen4(d) << endl
-         << "sci8 = " << sci8(d) << endl
-         << "fix8 = " << fix8(d) << endl
-         << "default = " << d << endl;
+    cout << "default\t= " << d << endl
+         << "gen4\t= " << gen4(d) << endl
+         << "sci8\t= " << sci8(d) << endl
+         << "fix8\t= " << fix8(d) << endl
+         << "default\t= " << d << endl;
 }
 
 int main()
