@@ -1,11 +1,10 @@
-all: Main.o
-	g++ -o Main Main.o
-Main.o: Main.cpp Lexer.h Type.h Word.h Token.h Num.h Real.h Tag.h
-	g++ -c Main.cpp
+all: test.o
+	g++ -o main test.o
+Main.o: test.cpp Form.h
+	g++ -c test.cpp
 
 dep: 
-	g++ -M Main.cpp Lexer.h Type.h Word.h Token.h Num.h Real.h Tag.h
-	g++ -M -MF dep.d Main.cpp Lexer.h Type.h Word.h Token.h Num.h Real.h Tag.h
-
+	g++ -M test.cpp Form.h
+	g++ -M -MF dep.d test.cpp Form.h
 clean:
-	rm -f *.o Main *.d
+	rm -f *.o main *.d
