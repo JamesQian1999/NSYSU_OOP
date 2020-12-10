@@ -1,11 +1,13 @@
-all: Main.o
-	g++ -o Main Main.o
-Main.o: Main.cpp Lexer.h Type.h Word.h Token.h Num.h Real.h Tag.h
-	g++ -c Main.cpp
+all: test.o Trace.o
+	g++ -o main test.o Trace.o
+test.o: test.cpp Vector.h
+	g++ -c test.cpp
+Trace.o: Trace.cpp Tace.h
+	g++ -c Trace.cpp
 
 dep: 
-	g++ -M Main.cpp Lexer.h Type.h Word.h Token.h Num.h Real.h Tag.h
-	g++ -M -MF dep.d Main.cpp Lexer.h Type.h Word.h Token.h Num.h Real.h Tag.h
+	g++ -M test.cpp Trace.cpp Trace.h Vector.h
+	g++ -M -MF dep.d test.cpp Trace.cpp Trace.h Vector.h
 
 clean:
-	rm -f *.o Main *.d
+	rm -f *.o main *.d
