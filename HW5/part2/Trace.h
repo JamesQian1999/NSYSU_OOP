@@ -11,7 +11,8 @@ using std::string;
 class Trace
 {
 public:
-    Trace(const string n):name(n)
+    Trace(const string n)
+        : name(n)
     {
         depth++;
         print_name("Entering");
@@ -38,7 +39,7 @@ private:
     const string name;
 };
 
-#ifdef __TRACE__
+#ifndef __TRACE__
 #define TRACE(v, n) Trace v(n)
 #else
 #define TRACE(v, n)

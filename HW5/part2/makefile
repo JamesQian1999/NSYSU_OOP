@@ -2,7 +2,7 @@ all: test.o Trace.o
 	g++ -o main test.o Trace.o
 test.o: test.cpp Vector.h
 	g++ -c test.cpp
-Trace.o: Trace.cpp Tace.h
+Trace.o: Trace.cpp Trace.h
 	g++ -c Trace.cpp
 
 dep: 

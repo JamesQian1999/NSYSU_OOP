@@ -6,13 +6,14 @@
 using std::cout;
 using std::endl;
 
-vector<float> fvec(100);
-vector<int> ivec(200);
-vector<char> cvec(300);
+Vector<float> fvec(100);
+Vector<int> ivec(200);
+Vector<char> cvec(300);
 
-vector<float *> pfvec(100);
-vector<int *> pivec(200);
-vector<char *> pcvec(300);
+
+Vector<float *> pfvec(100);
+Vector<int *> pivec(200);
+Vector<char *> pcvec(300);
 
 int main()
 {
@@ -31,19 +32,20 @@ int main()
     pfvec.elem(3) = &f;
     pfvec[3] = &f;
     cout << " pfvec.elem(3) = " << *pfvec.elem(3) << endl;
-    cout << " pfvec[3] = " << *pfvec[3] << endl;
+    cout << " pfvec[3]      = " << *pfvec[3] << endl;
+    cout << " pfvec[3]      = " << *pfvec[3] << endl;
 
     int a = 10;
     pivec.elem(3) = &a;
     pivec[3] = &a;
     cout << " pivec.elem(3) = " << *pivec.elem(3) << endl;
-    cout << " pivec[3] = " << *pivec[3] << endl;
+    cout << " pivec[3]      = " << *pivec[3] << endl;
 
     char c = 'A';
     pcvec.elem(3) = &c;
     pcvec[3] = &c;
     cout << " pcvec.elem(3) = " << *pcvec.elem(3) << endl;
-    cout << " pcvec[3] = " << *pcvec[3] << endl;
+    cout << " pcvec[3]      = " << *pcvec[3] << endl;
 
     return 0;
 }
